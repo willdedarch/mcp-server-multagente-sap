@@ -5,7 +5,7 @@ import { z } from 'zod';
 // =====================================================
 
 export const ProjectStatus = z.enum(['active', 'paused', 'completed', 'archived']);
-export const TodoType = z.enum(['feature', 'bug', 'analysis', 'architecture', 'optimization', 'refactor']);
+export const TodoType = z.enum(['feature', 'bug', 'analysis', 'architecture', 'optimization', 'refactor', 'integration']);
 export const Priority = z.enum(['critical', 'high', 'medium', 'low']);
 export const TodoStatus = z.enum(['pending', 'in_progress', 'completed', 'cancelled', 'blocked']);
 export const TaskStatus = z.enum(['pending', 'in_progress', 'completed', 'failed', 'skipped']);
@@ -292,3 +292,13 @@ export const DEFAULT_SETTINGS = {
   analysisExpirationDays: 30,
 } as const;
 
+export type ProjectStatus = z.infer<typeof ProjectStatus>;
+export type TodoStatus = z.infer<typeof TodoStatus>;
+export type TaskStatus = z.infer<typeof TaskStatus>;
+export type TodoType = z.infer<typeof TodoType>;
+export type Priority = z.infer<typeof Priority>;
+export type AnalysisType = z.infer<typeof AnalysisType>;
+export type AgentType = z.infer<typeof AgentType>;
+export type BugSeverity = z.infer<typeof BugSeverity>;
+export type BugStatus = z.infer<typeof BugStatus>;
+export type ExecutionStatus = z.infer<typeof ExecutionStatus>;

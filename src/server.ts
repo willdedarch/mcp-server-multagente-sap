@@ -5,16 +5,15 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
-  Tool,
+  
 } from '@modelcontextprotocol/sdk/types.js';
-import { z } from 'zod';
 import { DatabaseService } from './database/service.js';
 import { CommandProcessor } from './commands/processor.js';
 import { AgentOrchestrator } from './agents/orchestrator.js';
 import { ContextManager } from './utils/context.js';
 import { Logger } from './utils/logger.js';
 import type { CommandContext, CommandResult } from './types/index.js';
-
+import type { Tool } from '@modelcontextprotocol/sdk/types.js';
 // =====================================================
 // CONFIGURAÇÃO DO SERVIDOR MCP
 // =====================================================
@@ -28,17 +27,13 @@ class SapB1MultiAgentServer {
   private logger: Logger;
 
   constructor() {
-    this.server = new Server(
-      {
-        name: 'sap-b1-multiagent',
-        version: '1.0.0',
+    this.server = new Server({
+      name: 'sap-b1-multiagent',
+      version: '1.0.0',
+      capabilities: {
+        tools: {},
       },
-      {
-        capabilities: {
-          tools: {},
-        },
-      }
-    );
+    });
 
     this.logger = new Logger('SapB1MultiAgentServer');
     this.db = new DatabaseService();
@@ -246,7 +241,7 @@ class SapB1MultiAgentServer {
       try {
         // Extrair contexto do projeto (normalmente viria do Claude Project)
         const context: CommandContext = {
-          projectId: process.env.DEFAULT_PROJECT_ID || 'PROJ-DEFAULT-001',
+          projectId: process.env['DEFAULT_PROJECT_ID'] || 'PROJ-DEFAULT-001',
           userId: 'system',
           sessionId: `session-${Date.now()}`,
         };

@@ -201,7 +201,7 @@ export class Logger {
 // =====================================================
 
 // Configurar nível baseado na variável de ambiente
-const logLevelEnv = process.env.LOG_LEVEL?.toUpperCase();
+const logLevelEnv = process.env['LOG_LEVEL']?.toUpperCase();
 switch (logLevelEnv) {
   case 'DEBUG':
     Logger.setLevel(LogLevel.DEBUG);
@@ -217,11 +217,12 @@ switch (logLevelEnv) {
     break;
   default:
     // Desenvolvimento: DEBUG, Produção: INFO
-    Logger.setLevel(process.env.NODE_ENV === 'production' ? LogLevel.INFO : LogLevel.DEBUG);
+    Logger.setLevel(process.env['NODE_ENV'] === 'production' ? LogLevel.INFO : LogLevel.DEBUG);
+
 }
 
 // Configurar máximo de logs baseado na variável de ambiente
-const maxLogsEnv = process.env.MAX_LOGS;
+const maxLogsEnv = process.env['MAX_LOGS'];
 if (maxLogsEnv && !isNaN(parseInt(maxLogsEnv))) {
   Logger.setMaxLogs(parseInt(maxLogsEnv));
 }

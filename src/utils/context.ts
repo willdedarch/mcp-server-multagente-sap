@@ -36,8 +36,25 @@ export class ContextManager {
   async saveContext(data: ContextData): Promise<ContextStack> {
     try {
       this.logger.debug(`Salvando contexto para projeto ${data.project_id}`);
-
-      const context = await this.db.saveContext(data);
+// ANTES da linha 40, adicionar:
+       const contextToSave: Omit<ContextStack, 'id' | 'saved_at'> = {
+          project_id: data.project_id,
+          open_files: data.open_files ?? [],
+          session_data: data.session_data ?? {},
+          is_active: true,
+          stack_depth: data.stack_depth ?? 0,
+          todo_id: data.todo_id,
+          task_id: data.task_id,
+          file_path: data.file_path,
+          line_number: data.line_number,
+          cursor_position: data.cursor_position,
+          working_directory: data.working_directory,
+          terminal_output: data.terminal_output,
+          next_action: data.next_action,
+          notes: data.notes,
+          parent_context_id: data.parent_context_id,
+        };
+        const context = await this.db.saveContext(contextToSave);
       
       // Atualizar cache local
       const projectContexts = this.contextStack.get(data.project_id) || [];

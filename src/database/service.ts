@@ -1,4 +1,5 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { Logger } from '../utils/logger.js';
 import type {
   Project,
@@ -67,8 +68,8 @@ export class DatabaseService {
 
   async connect(): Promise<void> {
     try {
-      const supabaseUrl = process.env.SUPABASE_URL;
-      const supabaseKey = process.env.SUPABASE_ANON_KEY;
+      const supabaseUrl = process.env['SUPABASE_URL'];
+      const supabaseKey = process.env['SUPABASE_ANON_KEY'];
 
       if (!supabaseUrl || !supabaseKey) {
         throw new Error('SUPABASE_URL e SUPABASE_ANON_KEY devem estar definidas');
@@ -548,7 +549,8 @@ export class DatabaseService {
     // Buscar tasks dos TODOs
     let tasksResult = { data: [] as any[] };
     if (todoIds.length > 0) {
-      tasksResult = await client.from('tasks').select('status').in('todo_id', todoIds);
+      const result = await client.from('tasks').select('status').in('todo_id', todoIds);
+      tasksResult = { data: result.data || [] };
     }
 
     const [bugsResult, analysesResult] = await Promise.all([
